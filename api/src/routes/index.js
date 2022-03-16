@@ -2,6 +2,7 @@ const router = require("express").Router();
 const videogame = require("./videogame");
 const videogames = require("./videogames");
 const genres = require("./genres");
+const platforms = require("./platforms");
 const error404 = require("./controllers/404");
 // Importar todos los routers;
 // Ejemplo: const authRouter = require('./auth.js');
@@ -12,6 +13,7 @@ const error404 = require("./controllers/404");
 router.use("/videogame", videogame);
 router.use("/videogames", videogames);
 router.use("/genres", genres);
+router.use("/platforms", platforms);
 
 //prettier-ignore
 router
