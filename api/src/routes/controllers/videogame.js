@@ -1,14 +1,69 @@
+require("dotenv").config();
+const { API } = process.env;
+const axios = require("axios");
 const { Videogame, Genre, Platform } = require("../../db");
-const { Op } = require("sequelize");
+const { checkIfValidUUID, getIdName } = require("./utils");
 
 module.exports = {
-  get(req, res) {
+  async get(req, res) {
     const { idVideogame } = req.params;
-    res.send("GET videogame: " + idVideogame);
+
+    if (checkIfValidUUID(idVideogame)) {
+      Videogame.findByPk(idVideogame, {
+        attributes: [
+          "id",
+          "name",
+          "description",
+          "released",
+          "rating",
+          "background_image",
+        ],
+        include: [
+          {
+            model: Genre,
+            attributes: ["id", "name"],
+            through: { attributes: [] },
+          },
+          {
+            model: Platform,
+            attributes: ["id", "name"],
+            through: { attributes: [] },
+          },
+        ],
+      })
+        .then((videogame) => res.send(videogame))
+        .catch((err) => res.status(500).send(err));
+    } else {
+      try {
+        const gameFromApi = await axios.get(
+          `https://api.rawg.io/api/games/${idVideogame}?key=${API}`
+        );
+
+        const { id, name, description, released, background_image, rating } =
+          gameFromApi.data;
+
+        const genres = getIdName(gameFromApi.data.genres);
+        const platforms = getIdName(gameFromApi.data.platforms, "platform");
+
+        const videogameFromApi = {
+          id,
+          name,
+          description,
+          released,
+          rating,
+          background_image,
+          genres,
+          platforms,
+        };
+        res.json(videogameFromApi);
+      } catch (err) {
+        res.status(500).send(err.message);
+      }
+    }
   },
   async post(req, res) {
     //prettier-ignore
-    const { name, description, releaseDate, rating, genres, background_image, platforms } = req.body;
+    const { name, description, released, rating, genres, background_image, platforms } = req.body;
 
     /* const countGenres = await Genre.findAndCountAll({
       where: { id: genres },
@@ -87,7 +142,7 @@ module.exports = {
         Videogame.create({
           name,
           description,
-          releaseDate,
+          released,
           rating,
           background_image,
         })
