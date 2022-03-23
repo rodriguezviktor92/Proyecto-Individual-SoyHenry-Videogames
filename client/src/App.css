@@ -1,10 +1,59 @@
+body {
+  background-color: #282c34;
+}
 .App {
+  padding: 24px 40px;
   text-align: center;
+  display: grid;
+  /* grid-template-columns: repeat(9, 1fr);
+  grid-template-rows: 56px auto;
+  grid-template-areas:
+    "hd hd hd hd   hd   hd   hd   hd   hd"
+    "sd sd main main main main main main main"
+    "sd sd main main main main main main main"; */
+  grid-template:
+    "hd hd hd hd   hd   hd   hd   hd   hd" 56px
+    "sd sd main main main main main main main" auto
+    "sd sd main main main main main main main" auto;
+  height: 100vh;
+}
+
+.header {
+  grid-area: hd;
+  display: grid;
+  grid-template-columns: auto auto auto;
+  justify-content: space-between;
+}
+.header div {
+  height: 56px;
+}
+.content {
+  grid-area: main;
+  display: grid;
+  grid-template-columns: 333px 333px 333px;
+  grid-gap: 5px;
+  justify-content: center;
+}
+.sidebar {
+  grid-area: sd;
 }
 
 .App-logo {
   height: 40vmin;
   pointer-events: none;
+}
+
+.card {
+  background-color: gray;
+  border-radius: 20px;
+  height: 350px;
+}
+.card img {
+  border-radius: 20px 20px 0 0;
+}
+
+.cardImg {
+  height: 70%;
 }
 
 @media (prefers-reduced-motion: no-preference) {
