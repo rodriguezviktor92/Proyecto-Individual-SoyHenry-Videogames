@@ -55,7 +55,22 @@ body {
 .cardImg {
   height: 70%;
 }
-
+ul > li {
+  display: inline-block;
+  padding: 5px;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 20px;
+  margin: 5px;
+  cursor: pointer;
+}
+.current-page {
+  border-color: antiquewhite;
+}
+.disabled {
+  pointer-events: none;
+  opacity: 0.6;
+}
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;

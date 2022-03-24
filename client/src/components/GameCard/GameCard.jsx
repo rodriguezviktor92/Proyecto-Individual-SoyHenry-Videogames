@@ -1,7 +1,6 @@
 import React from "react";
 
-function GameCard(props) {
-  const { id, name, background_image } = props;
+function GameCard({ id, name, background_image }) {
   return (
     <div className="card">
       <div className="cardImg">
