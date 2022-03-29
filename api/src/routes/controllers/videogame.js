@@ -39,8 +39,14 @@ module.exports = {
           `https://api.rawg.io/api/games/${idVideogame}?key=${API}`
         );
 
-        const { id, name, description, released, background_image, rating } =
-          gameFromApi.data;
+        const {
+          id,
+          name,
+          description_raw,
+          released,
+          background_image,
+          rating,
+        } = gameFromApi.data;
 
         const genres = getIdName(gameFromApi.data.genres);
         const platforms = getIdName(gameFromApi.data.platforms, "platform");
@@ -48,7 +54,7 @@ module.exports = {
         const videogameFromApi = {
           id,
           name,
-          description,
+          description: description_raw,
           released,
           rating,
           background_image,
@@ -57,88 +63,32 @@ module.exports = {
         };
         res.json(videogameFromApi);
       } catch (err) {
-        res.status(500).send(err.message);
+        res.send({ success: false, err: err.message });
       }
     }
   },
   async post(req, res) {
     //prettier-ignore
     const { name, description, released, rating, genres, background_image, platforms } = req.body;
-
-    /* const countGenres = await Genre.findAndCountAll({
-      where: { id: genres },
-    });
-
-    const countPlatforms = await Platform.findAndCountAll({
-      where: { id: platforms },
-    });
-    if (
-      countGenres.count < genres.length ||
-      countPlatforms < platforms.length
-    ) {
-      res.send({
-        succcess: false,
-        err: "Alguno de los generos o plataformas enviados no fue encontrado",
-      });
-    } else {
-      try {
-        const videogame = await Videogame.create({
-          name,
-          description,
-          releaseDate,
-          rating,
-          background_image,
-        });
-        const addgenres = videogame.addGenres(genres);
-        const addplatforms = videogame.addPlatforms(platforms);
-        if (videogame && addgenres && addplatforms) {
-          res.status(201).json({ success: true });
-        }
-      } catch (error) {
-        res.json({ success: false, err: error });
-      }
-    } */
+    const genresId = genres.map((genre) => genre.id);
+    const platformsId = platforms.map((platform) => platform.id);
 
     try {
       const checkGenrePlatform = await Promise.allSettled([
-        Genre.findAndCountAll({ where: { id: genres } }).then(
+        Genre.findAndCountAll({ where: { id: genresId } }).then(
           (result) => result.count
         ),
-        Platform.findAndCountAll({ where: { id: platforms } }).then(
+        Platform.findAndCountAll({ where: { id: platformsId } }).then(
           (result) => result.count
         ),
       ]).then((values) => {
         const [{ value: countGenres }, { value: countPlatforms }] = values;
         //prettier-ignore
-        const result = countGenres === genres.length && countPlatforms === platforms.length ? true : false;
+        const result = countGenres === genresId.length && countPlatforms === platformsId.length ? true : false;
         return result;
       });
 
       if (checkGenrePlatform) {
-        /*       const videogame = await Videogame.create({
-        name,
-        description,
-        releaseDate,
-        rating,
-        background_image,
-      });
-
-      Promise.allSettled([
-        videogame.addGenres(genres),
-        videogame.addPlatforms(platforms),
-      ])
-        .then((values) => {
-          const [{ status: addgenres }, { status: addplatforms }] = values;
-          //prettier-ignore
-          const result = addgenres === "fulfilled" && addplatforms === "fulfilled" ? true : false;
-          console.log(values);
-          return result;
-        })
-        .then((result) => res.status(201).json({ success: result }))
-        .catch((err) => {
-          console.log(err);
-        }); */
-
         Videogame.create({
           name,
           description,
@@ -148,8 +98,8 @@ module.exports = {
         })
           .then((videogame) =>
             Promise.allSettled([
-              videogame.addGenres(genres),
-              videogame.addPlatforms(platforms),
+              videogame.addGenres(genresId),
+              videogame.addPlatforms(platformsId),
             ])
           )
           .then((values) => {
