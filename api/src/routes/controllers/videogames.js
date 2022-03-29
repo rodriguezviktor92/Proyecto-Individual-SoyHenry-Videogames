@@ -16,7 +16,7 @@ module.exports = {
         let videogamesFromDb = await Videogame.findAll({
           where: {
             name: {
-              [Op.like]: req.query.name,
+              [Op.like]: req.query.name.toLowerCase(),
             },
           },
           attributes: [
@@ -46,7 +46,7 @@ module.exports = {
         });
 
         const result = await axios.get(
-          `https://api.rawg.io/api/games?search=${name}&key=${API}`
+          `https://api.rawg.io/api/games?search=${name.toLowerCase()}&key=${API}`
         );
 
         result.data.results.forEach((element) => {
@@ -56,12 +56,19 @@ module.exports = {
             released: element.released,
             rating: element.rating,
             background_image: element.background_image,
-            genres: element.genres.map((genre) => {
-              return { id: genre.id, name: genre.name };
-            }),
-            platforms: element.platforms.map((platform) => {
-              return { id: platform.platform.id, name: platform.platform.name };
-            }),
+            genres: element.genres
+              ? element.genres.map((genre) => {
+                  return { id: genre.id, name: genre.name };
+                })
+              : genres,
+            platforms: element.platforms
+              ? element.platforms.map((platform) => {
+                  return {
+                    id: platform.platform.id,
+                    name: platform.platform.name,
+                  };
+                })
+              : element.platforms,
           };
           videogames.push(videogame);
         });
@@ -71,7 +78,7 @@ module.exports = {
           res.send(videogameTotal.slice(0, 15));
         }
       } catch (err) {
-        res.status(500).send(err);
+        res.status(500).send(`error: ${err}`);
       }
     } else {
       try {
