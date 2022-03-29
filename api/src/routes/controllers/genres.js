@@ -13,7 +13,11 @@ module.exports = {
           `https://api.rawg.io/api/genres?key=${API}`
         );
         const results = genresAPI.data.results.map((e) => {
-          return { id: e.id, name: e.name };
+          return {
+            id: e.id,
+            name: e.name,
+            image_background: e.image_background,
+          };
         });
         Genre.bulkCreate(results).then((result) => res.send(result));
       } else {
