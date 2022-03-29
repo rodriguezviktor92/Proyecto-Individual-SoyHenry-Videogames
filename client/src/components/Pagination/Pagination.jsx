@@ -1,4 +1,5 @@
 import React from "react";
+import css from "./Pagination.module.css";
 import { useDispatch } from "react-redux";
 import { setCurrentPage } from "../../redux/actions";
 
@@ -15,23 +16,30 @@ function Pagination({ videogamesPerPage, totalVideogame, currentPage }) {
   };
 
   return (
-    <nav>
+    <nav className={css.pagination}>
       <ul>
-        <li className={currentPage === 1 ? "disabled" : ""}>
-          <span onClick={() => handleClick(currentPage - 1)}>Prev</span>
+        <li
+          className={currentPage === 1 ? css.disabled : undefined}
+          onClick={() => handleClick(currentPage - 1)}
+        >
+          <span>Prev</span>
         </li>
 
-        {pageNumbers.map((number) => (
+        {pageNumbers?.map((number) => (
           <li
             key={number}
-            className={currentPage === number ? "current-page" : "page"}
+            className={currentPage === number ? css.currentPage : undefined}
+            onClick={() => handleClick(number)}
           >
-            <span onClick={() => handleClick(number)}>{number}</span>
+            <span>{number}</span>
           </li>
         ))}
 
-        <li className={pageNumbers.length === currentPage ? "disabled" : ""}>
-          <span onClick={() => handleClick(currentPage + 1)}>Next</span>
+        <li
+          className={pageNumbers.length === currentPage ? css.disabled : ""}
+          onClick={() => handleClick(currentPage + 1)}
+        >
+          <span>Next</span>
         </li>
       </ul>
     </nav>

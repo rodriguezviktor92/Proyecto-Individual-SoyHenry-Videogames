@@ -1,0 +1,68 @@
+.header {
+  grid-area: hd;
+
+  justify-content: space-between;
+  background-color: black;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+.header div {
+  height: 56px;
+}
+
+.header h1 {
+  color: white;
+  margin: 0;
+}
+
+.content {
+  padding: 24px 40px;
+  display: flex;
+  justify-content: space-between;
+  -webkit-box-pack: justify;
+  -webkit-box-align: center;
+  align-items: center;
+}
+
+.content img {
+  width: 64px;
+  filter: invert(97%) sepia(5%) saturate(10%) hue-rotate(24deg) brightness(116%)
+    contrast(100%);
+  transform: rotate(45deg);
+  padding-right: 26px;
+}
+.title {
+  display: flex;
+}
+
+.list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-flow: row;
+  align-items: center;
+  height: 100%;
+}
+
+.list li {
+  display: flex;
+  height: 100%;
+  line-height: 48px;
+  padding-right: 16px;
+}
+
+.list li > a {
+  color: #fff;
+  height: 100%;
+  font-weight: 400;
+  font-size: 14px;
+  text-decoration: underline hsla(0, 0%, 100%, 0.4);
+  text-underline-position: under;
+}
+
+.list li > a:hover,
+.list li > a.active {
+  color: hsla(0, 0%, 100%, 0.4);
+}
