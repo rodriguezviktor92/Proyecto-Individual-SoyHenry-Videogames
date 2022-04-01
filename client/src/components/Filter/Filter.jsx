@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import css from "./Filter.module.css";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   orderByName,
   orderByRating,
@@ -11,6 +11,7 @@ import {
 
 function Filter({ setOrder }) {
   const [search, setSearch] = useState("");
+  const filterSource = useSelector((state) => state.filterSource);
 
   const dispatch = useDispatch();
 
@@ -68,8 +69,9 @@ function Filter({ setOrder }) {
           id=""
           onChange={handleSortBySource}
           className={css.selectSource}
+          value={filterSource}
         >
-          <option value="ALL">Order By Source</option>
+          <option value="ALL">Filter By Source</option>
           <option value="ALL">All</option>
           <option value="DB">DataBase</option>
           <option value="API">API</option>

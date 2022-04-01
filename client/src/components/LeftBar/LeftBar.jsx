@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useDispatch, useSelector } from "react-redux";
 import css from "./LeftBar.module.css";
 import { sortByGenre } from "../../redux/actions";
@@ -6,24 +6,28 @@ import { sortByGenre } from "../../redux/actions";
 function LeftBar() {
   const dispatch = useDispatch();
   const genres = useSelector((state) => state.genres);
-  const [currentSelect, setCurrentSelect] = useState("-1");
+  const currentSelect = useSelector((state) => state.filterGenres);
 
   const handleSortByGenre = (event) => {
     const genre = event.target.value;
     dispatch(sortByGenre(genre));
-    setCurrentSelect(genre);
+    //    setCurrentSelect(genre);
     console.log(currentSelect);
   };
 
   return (
     <div className={css.sidebar}>
       <div className={css.genres}>
-        <h2>Genres</h2>
+        <h2>Filter By Genres</h2>
         <ul>
           <li
             value="-1"
             onClick={(e) => handleSortByGenre(e)}
-            className={currentSelect == "-1" ? css.active : undefined}
+            className={
+              currentSelect == "-1" || currentSelect === "ALL"
+                ? css.active
+                : undefined
+            }
           >
             ALL
           </li>

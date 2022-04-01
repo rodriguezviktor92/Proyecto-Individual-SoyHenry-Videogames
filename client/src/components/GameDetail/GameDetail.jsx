@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import {
   deleteVideoGame,
   getVideogame,
@@ -10,6 +10,12 @@ import {
 import GameNotFound from "../GameNotFound/GameNotFound";
 import Loading from "../Loading/Loading";
 import css from "./GameDetail.module.css";
+
+function checkIfValidUUID(str) {
+  const regexExp =
+    /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/;
+  return regexExp.test(str);
+}
 
 const GameDetail = () => {
   const { videoGameId } = useParams();
@@ -46,15 +52,19 @@ const GameDetail = () => {
           }}
         >
           <div className={css.top}>
-            <h1>Back</h1>
+            <Link to="/home">Back</Link>
 
-            <button
-              onClick={() => {
-                handleClick(videoGameId);
-              }}
-            >
-              Delete
-            </button>
+            {checkIfValidUUID(videogame.id) ? (
+              <button
+                onClick={() => {
+                  handleClick(videoGameId);
+                }}
+              >
+                Delete
+              </button>
+            ) : (
+              <div></div>
+            )}
           </div>
 
           <div className={css.left}>
