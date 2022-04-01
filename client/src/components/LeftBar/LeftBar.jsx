@@ -11,8 +11,6 @@ function LeftBar() {
   const handleSortByGenre = (event) => {
     const genre = event.target.value;
     dispatch(sortByGenre(genre));
-    //    setCurrentSelect(genre);
-    console.log(currentSelect);
   };
 
   return (

@@ -15,7 +15,6 @@ export default function GameContent() {
 
   const indexOfLastVideogame = currentPage * videogamesPerPage;
   const indexOfFirstVideogame = indexOfLastVideogame - videogamesPerPage;
-  //const currentVideogames = filtergames.length !== 0 ? filtergames : videogames;
   const videogamesPagination = currentVideogames.slice(
     indexOfFirstVideogame,
     indexOfLastVideogame

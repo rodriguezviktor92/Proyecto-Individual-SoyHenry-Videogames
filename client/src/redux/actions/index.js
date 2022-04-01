@@ -14,9 +14,6 @@ export const SET_LOADING = "SET_LOADING";
 export const RESET_VIDEOGAME = "RESET_VIDEOGAME";
 
 export const getAllVideogames = () => {
-  /*     return fetch("http://localhost:3001/videogames")
-      .then((response) => response.json())
-      .then((json) => dispatch({ type: GET_ALL_VIDEOGAMES, payload: json })); */
   return async function (dispatch) {
     try {
       const result = await axios.get("http://localhost:3001/videogames");
@@ -94,7 +91,7 @@ export const getVideogame = (videoGameId) => {
     const result = await axios.get(
       `http://localhost:3001/videogame/${videoGameId}`
     );
-    console.log(result.data.success);
+
     if (result.data.success) {
       return dispatch({
         type: GET_VIDEOGAME,
