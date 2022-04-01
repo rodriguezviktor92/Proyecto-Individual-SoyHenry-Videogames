@@ -4,6 +4,8 @@ import { useSelector } from "react-redux";
 import Filter from "../Filter/Filter";
 import GameCard from "../GameCard/GameCard";
 import Pagination from "../Pagination/Pagination";
+import Loading from "../Loading/Loading";
+import GameNotFound from "../GameNotFound/GameNotFound";
 
 export default function GameContent() {
   const loading = useSelector((state) => state.loading);
@@ -33,9 +35,9 @@ export default function GameContent() {
       />
       <div className={css.cardContent}>
         {loading ? (
-          <span>Loading...</span>
+          <Loading />
         ) : !videogamesPagination.length ? (
-          <span>Not found Game</span>
+          <GameNotFound />
         ) : (
           videogamesPagination.map((videogame) => (
             <GameCard

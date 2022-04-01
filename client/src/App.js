@@ -14,6 +14,7 @@ import {
 } from "./redux/actions";
 import GameDetail from "./components/GameDetail/GameDetail";
 import CreateVideoGame from "./components/CreateVideoGame/CreateVideoGame";
+import PageNotFound from "./components/PageNotFound/PageNotFound";
 
 function App() {
   const dispatch = useDispatch();
@@ -23,6 +24,7 @@ function App() {
     dispatch(getAllGenres());
     dispatch(getAllPlatforms());
     dispatch(setLoading(true));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -58,14 +60,7 @@ function App() {
             </>
           }
         />
-        <Route
-          path="*"
-          element={
-            <>
-              <h1>404 Pagine Not Found</h1>
-            </>
-          }
-        />
+        <Route path="*" element={<PageNotFound />} />
       </Routes>
     </div>
   );

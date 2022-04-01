@@ -69,18 +69,10 @@ function Filter({ setOrder }) {
           onChange={handleSortBySource}
           className={css.selectSource}
         >
-          <option value="ALL" key={0}>
-            Order By Source
-          </option>
-          <option value="ALL" key={0}>
-            All
-          </option>
-          <option value="DB" key={1}>
-            DataBase
-          </option>
-          <option value="API" key={2}>
-            API
-          </option>
+          <option value="ALL">Order By Source</option>
+          <option value="ALL">All</option>
+          <option value="DB">DataBase</option>
+          <option value="API">API</option>
         </select>
 
         <select name="" id="" onChange={handleOrderByName}>

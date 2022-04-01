@@ -122,4 +122,17 @@ module.exports = {
       res.status(500).send(err);
     }
   },
+  async delete(req, res) {
+    const { idVideogame } = req.params;
+
+    try {
+      const result = await Videogame.destroy({
+        where: { id: idVideogame },
+      });
+
+      res.status(201).json({ success: result === 1 ? true : false });
+    } catch (err) {
+      res.send(err);
+    }
+  },
 };

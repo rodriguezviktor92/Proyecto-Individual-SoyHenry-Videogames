@@ -2,10 +2,13 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
+  deleteVideoGame,
   getVideogame,
   resetVideogame,
   setLoading,
 } from "../../redux/actions/index";
+import GameNotFound from "../GameNotFound/GameNotFound";
+import Loading from "../Loading/Loading";
 import css from "./GameDetail.module.css";
 
 const GameDetail = () => {
@@ -21,7 +24,17 @@ const GameDetail = () => {
     return () => {
       dispatch(resetVideogame());
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  const handleClick = async (videoGameId) => {
+    const deleted = await dispatch(deleteVideoGame(videoGameId));
+    if (deleted.data.success) {
+      alert("Videogame Delete");
+    } else {
+      alert(deleted.data.err);
+    }
+  };
 
   return (
     <>
@@ -32,7 +45,19 @@ const GameDetail = () => {
             backgroundImage: `radial-gradient(closest-side at center center, transparent, rgb(21, 21, 21)),  url(${videogame.background_image})`,
           }}
         >
-          <div>
+          <div className={css.top}>
+            <h1>Back</h1>
+
+            <button
+              onClick={() => {
+                handleClick(videoGameId);
+              }}
+            >
+              Delete
+            </button>
+          </div>
+
+          <div className={css.left}>
             <div className={css.title}>
               <h1>{videogame.name}</h1>
             </div>
@@ -66,7 +91,7 @@ const GameDetail = () => {
             </div>
           </div>
 
-          <div className={css.contentRigth}>
+          <div className={css.rigth}>
             <div>
               <img src={videogame.background_image} alt="" />
             </div>
@@ -77,9 +102,9 @@ const GameDetail = () => {
           </div>
         </div>
       ) : loading ? (
-        <h3>Loading</h3>
+        <Loading />
       ) : (
-        <h3>VideoGame Not Found</h3>
+        <GameNotFound />
       )}
     </>
   );

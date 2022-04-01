@@ -48,7 +48,7 @@ const rootReducer = (state = initialState, action) => {
         case "API":
           return {
             ...state,
-            filtergames: state.videogames.filter(
+            filtergames: state.filtergames.filter(
               (videogame) => videogame.id.toString().length < 36
             ),
             currentPage: 1,
@@ -56,7 +56,7 @@ const rootReducer = (state = initialState, action) => {
         case "DB":
           return {
             ...state,
-            filtergames: state.videogames.filter(
+            filtergames: state.filtergames.filter(
               (videogame) => videogame.id.toString().length === 36
             ),
             currentPage: 1,
@@ -70,11 +70,11 @@ const rootReducer = (state = initialState, action) => {
       }
     case SORT_BY_GENRE:
       let result = [];
-      console.log(action.payload);
+
       if (action.payload === "ALL" || action.payload === -1) {
         result = state.videogames;
       } else {
-        state.videogames.forEach((videogame) => {
+        state.filtergames.forEach((videogame) => {
           if (
             videogame.genres.filter(
               (genre) => genre.id === parseInt(action.payload, 10)

@@ -7,6 +7,7 @@ function Pagination({ videogamesPerPage, totalVideogame, currentPage }) {
   const dispatch = useDispatch();
 
   const pageNumbers = [];
+
   for (let i = 1; i <= Math.ceil(totalVideogame / videogamesPerPage); i++) {
     pageNumbers.push(i);
   }
@@ -14,35 +15,39 @@ function Pagination({ videogamesPerPage, totalVideogame, currentPage }) {
   const handleClick = (number) => {
     dispatch(setCurrentPage(number));
   };
-
+  console.log(pageNumbers);
   return (
-    <nav className={css.pagination}>
-      <ul>
-        <li
-          className={currentPage === 1 ? css.disabled : undefined}
-          onClick={() => handleClick(currentPage - 1)}
-        >
-          <span>Prev</span>
-        </li>
+    <>
+      {pageNumbers.length ? (
+        <nav className={css.pagination}>
+          <ul>
+            <li
+              className={currentPage === 1 ? css.disabled : undefined}
+              onClick={() => handleClick(currentPage - 1)}
+            >
+              <span>Prev</span>
+            </li>
 
-        {pageNumbers?.map((number) => (
-          <li
-            key={number}
-            className={currentPage === number ? css.currentPage : undefined}
-            onClick={() => handleClick(number)}
-          >
-            <span>{number}</span>
-          </li>
-        ))}
+            {pageNumbers?.map((number) => (
+              <li
+                key={number}
+                className={currentPage === number ? css.currentPage : undefined}
+                onClick={() => handleClick(number)}
+              >
+                <span>{number}</span>
+              </li>
+            ))}
 
-        <li
-          className={pageNumbers.length === currentPage ? css.disabled : ""}
-          onClick={() => handleClick(currentPage + 1)}
-        >
-          <span>Next</span>
-        </li>
-      </ul>
-    </nav>
+            <li
+              className={pageNumbers.length === currentPage ? css.disabled : ""}
+              onClick={() => handleClick(currentPage + 1)}
+            >
+              <span>Next</span>
+            </li>
+          </ul>
+        </nav>
+      ) : undefined}
+    </>
   );
 }
 

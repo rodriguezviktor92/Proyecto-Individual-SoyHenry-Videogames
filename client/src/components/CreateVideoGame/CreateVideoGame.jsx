@@ -1,31 +1,53 @@
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { createVideoGame } from "../../redux/actions";
+import {
+  createVideoGame,
+  getAllVideogames,
+  setLoading,
+} from "../../redux/actions";
 import css from "./CreateVideoGame.module.css";
+import { useNavigate } from "react-router-dom";
 
 const validate = (input, videogame) => {
-  console.log(input);
-  console.log(videogame);
-  if (input === "genres" || input === "platforms") {
-    console.log(!!videogame[input].length);
-    return !!videogame[input].length;
-  } else if (input === "rating") {
-    return videogame[input] >= 1 && videogame[input] < 5 ? true : false;
-  } else {
-    return videogame[input];
+  const validText = /^[A-za-z0-9]+[A-za-z0-9-,;!?:.&\s]+$/;
+  const validReleased = /^[0-9]{4}\b-[0-9]{2}\b-[0-9]{2}$/;
+
+  switch (input) {
+    case "genres":
+      return !!videogame[input].length;
+    case "platforms":
+      return !!videogame[input].length;
+    case "rating":
+      return videogame[input] >= 0 && videogame[input] <= 5 ? true : false;
+    case "name":
+      return validText.test(videogame[input]);
+    case "description":
+      return validText.test(videogame[input]);
+    case "released":
+      return validReleased.test(videogame[input]);
+    case "background_image":
+      return validUrl(videogame[input]);
+    default:
+      return false;
   }
 };
+
+function validUrl(str) {
+  const a = document.createElement("a");
+  a.href = str;
+  return a.host && a.host !== window.location.host;
+}
 
 function CreateVideoGame() {
   const genres = useSelector((state) => state.genres);
   const platforms = useSelector((state) => state.platforms);
-  const dispacth = useDispatch();
-
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
   const videogameInitialValues = {
     name: "",
     description: "",
     released: "",
-    rating: "",
+    rating: 0,
     genres: [],
     platforms: [],
     background_image: "",
@@ -59,7 +81,6 @@ function CreateVideoGame() {
         ...errors,
         [event.target.name]: {
           validity: true,
-          //msg: `${event.target.name} is required`,
           msg: errors[event.target.name].msg,
         },
       });
@@ -68,16 +89,13 @@ function CreateVideoGame() {
         ...errors,
         [event.target.name]: {
           validity: false,
-          //msg: `${event.target.name} is required`,
           msg: errors[event.target.name].msg,
         },
       });
     }
-    console.log(errors);
   };
 
   const handleSelect = (event) => {
-    //console.log(event.target[event.target.selectedIndex].text);
     if (event.target.value !== "title") {
       if (
         videogame[event.target.name].some(
@@ -164,9 +182,11 @@ function CreateVideoGame() {
       errors.platforms.validity &&
       errors.background_image.validity
     ) {
-      const create = await dispacth(createVideoGame(videogame));
+      const create = await dispatch(createVideoGame(videogame));
 
       if (create.data.success) {
+        dispatch(getAllVideogames());
+        dispatch(setLoading(true));
         alert("Videogame Create");
         setVideogame({
           name: "",
@@ -178,6 +198,7 @@ function CreateVideoGame() {
           background_image: "",
         });
         event.target.reset();
+        navigate("/home");
       } else {
         alert(create.data.err);
       }
@@ -208,41 +229,43 @@ function CreateVideoGame() {
               name="description"
               required
               onChange={handleChangge}
-              className={!errors.name.validity ? css.err : undefined}
+              className={!errors.description.validity ? css.err : undefined}
             />
             {!errors.description.validity && <p>{errors.description.msg}</p>}
           </div>
           <div>
-            <label>Released</label>
+            <label>Released: </label>
             <input
               type="date"
               name="released"
               id=""
               required
               onChange={handleChangge}
-              className={!errors.name.validity ? css.err : undefined}
+              className={!errors.released.validity ? css.err : undefined}
             />
             {!errors.released.validity && <p>{errors.released.msg}</p>}
           </div>
-          <div>
-            <label>Rating</label>
+          <div className={css.rating}>
+            <label>Rating: </label>
             <input
-              type="number"
+              type="range"
+              min="0"
+              max="5"
               name="rating"
-              id=""
-              required
+              list="ratingOptions"
               onChange={handleChangge}
-              className={!errors.name.validity ? css.err : undefined}
+              value={videogame.rating}
             />
-            {!errors.rating.validity && <p>{errors.rating.msg}</p>}
+            <p>{videogame.rating}</p>
           </div>
+
           <div>
-            <label>Genres</label>
+            <label>Genres: </label>
             <select
               name="genres"
               required
               onChange={handleSelect}
-              className={!errors.name.validity ? css.err : undefined}
+              className={!errors.genres.validity ? css.err : undefined}
             >
               <option value="title">Select VideoGame Genres</option>
               {genres.length === 0 ? (
@@ -273,12 +296,12 @@ function CreateVideoGame() {
             </ul>
           </div>
           <div>
-            <label>Platforms</label>
+            <label>Platforms: </label>
             <select
               name="platforms"
               required
               onChange={handleSelect}
-              className={!errors.name.validity ? css.err : undefined}
+              className={!errors.platforms.validity ? css.err : undefined}
             >
               <option value="title">Select VideoGame Platforms</option>
               {platforms.length === 0 ? (
@@ -308,20 +331,23 @@ function CreateVideoGame() {
             </ul>
           </div>
           <div>
-            <label>Background Image</label>
+            <label>Background Image: </label>
             <input
               type="url"
               name="background_image"
               id=""
               required
               onChange={handleChangge}
-              className={!errors.name.validity ? css.err : undefined}
+              className={
+                !errors.background_image.validity ? css.err : undefined
+              }
             />
             {!errors.background_image.validity && (
               <p>{errors.background_image.msg}</p>
             )}
           </div>
-          <input type="submit" value="Create" />
+
+          <button type="submit">Create</button>
         </form>
       </div>
     </div>

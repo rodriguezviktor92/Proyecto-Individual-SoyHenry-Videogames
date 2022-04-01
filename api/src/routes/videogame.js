@@ -5,6 +5,7 @@ const videogame = require("./controllers/videogame");
 router
     .route("/:idVideogame")
     .get(videogame.get)
+    .delete(videogame.delete)
 //prettier-ignore
 router
     .route("/")

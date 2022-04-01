@@ -150,3 +150,12 @@ export const resetVideogame = () => {
     type: RESET_VIDEOGAME,
   };
 };
+
+export const deleteVideoGame = (videoGameId) => {
+  return async function () {
+    const result = await axios.delete(
+      `http://localhost:3001/videogame/${videoGameId}`
+    );
+    return result;
+  };
+};

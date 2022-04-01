@@ -19,12 +19,15 @@ module.exports = (sequelize) => {
     },
     released: {
       type: DataTypes.DATEONLY,
+      allowNull: false,
     },
     rating: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
     background_image: {
       type: DataTypes.STRING,
+      allowNull: false,
     },
   });
 };

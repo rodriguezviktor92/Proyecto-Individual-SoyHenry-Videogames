@@ -13,7 +13,6 @@ function getIdName(array, subprop = "") {
       };
     });
   } else {
-    console.log(subprop);
     return array.map((object) => {
       return {
         id: object[subprop].id,

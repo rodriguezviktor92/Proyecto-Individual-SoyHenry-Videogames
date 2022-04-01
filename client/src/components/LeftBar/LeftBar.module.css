@@ -60,3 +60,8 @@
   background-color: darkgrey;
   outline: 1px solid slategrey;
 }
+
+.active {
+  border-color: antiquewhite;
+  border-style: solid;
+}
