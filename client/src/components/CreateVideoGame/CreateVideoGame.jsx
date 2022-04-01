@@ -185,8 +185,8 @@ function CreateVideoGame() {
       const create = await dispatch(createVideoGame(videogame));
 
       if (create.data.success) {
-        dispatch(getAllVideogames());
         dispatch(setLoading(true));
+        dispatch(getAllVideogames());
         alert("Videogame Create");
         setVideogame({
           name: "",

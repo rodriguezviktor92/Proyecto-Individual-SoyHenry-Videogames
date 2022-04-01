@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   deleteVideoGame,
   getVideogame,
@@ -10,6 +10,7 @@ import {
 import GameNotFound from "../GameNotFound/GameNotFound";
 import Loading from "../Loading/Loading";
 import css from "./GameDetail.module.css";
+import { getAllVideogames } from "../../redux/actions";
 
 function checkIfValidUUID(str) {
   const regexExp =
@@ -22,6 +23,7 @@ const GameDetail = () => {
   const dispatch = useDispatch();
   const videogame = useSelector((state) => state.videogame);
   const loading = useSelector((state) => state.loading);
+  const navigate = useNavigate();
 
   useEffect(() => {
     dispatch(setLoading(true));
@@ -36,6 +38,9 @@ const GameDetail = () => {
   const handleClick = async (videoGameId) => {
     const deleted = await dispatch(deleteVideoGame(videoGameId));
     if (deleted.data.success) {
+      dispatch(setLoading(true));
+      dispatch(getAllVideogames());
+      navigate("/home");
       alert("Videogame Delete");
     } else {
       alert(deleted.data.err);
@@ -52,13 +57,16 @@ const GameDetail = () => {
           }}
         >
           <div className={css.top}>
-            <Link to="/home">Back</Link>
+            <Link to="/home" className={css.back}>
+              Back
+            </Link>
 
             {checkIfValidUUID(videogame.id) ? (
               <button
                 onClick={() => {
                   handleClick(videoGameId);
                 }}
+                className={css.delete}
               >
                 Delete
               </button>
@@ -80,7 +88,7 @@ const GameDetail = () => {
                 <h3>Platforms</h3>
                 {videogame.platforms ? (
                   videogame.platforms.map((platform) => (
-                    <span>{platform.name} </span>
+                    <span key={platform.id}>{platform.name} </span>
                   ))
                 ) : (
                   <span>Not found platforms</span>
@@ -89,7 +97,9 @@ const GameDetail = () => {
               <div>
                 <h3>Genres</h3>
                 {videogame.genres ? (
-                  videogame.genres.map((genre) => <span>{genre.name} </span>)
+                  videogame.genres.map((genre) => (
+                    <span key={genre.id}>{genre.name} </span>
+                  ))
                 ) : (
                   <span>Not found genres</span>
                 )}

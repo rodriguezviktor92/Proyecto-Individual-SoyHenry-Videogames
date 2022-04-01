@@ -65,15 +65,13 @@ input[type="range"] {
   margin: 0;
   border: 0;
 }
-button {
-  cursor: pointer;
-}
 
-button {
+form button {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   font-size: 24px;
   font-weight: bold;
+  cursor: pointer;
   color: #fff;
 }
 
@@ -85,24 +83,6 @@ button {
   color: #f44336;
 }
 
-/* .content ul {
-  list-style: none;
-  position: relative;
-}
-content li {
-  list-style: none;
-}
-.content li::before {
-  content: "+";
-  position: absolute;
-  left: 19px;
-  font-weight: bold;
-  /* content: "";
-  display: inline-block;
-  height: 32px;
-  width: 32px;
-  background-image: url(https://icon-library.com/images/cancel-icon-transparent/cancel-icon-transparent-21.jpg); 
-} */
 .err {
   border-style: solid !important;
   border-width: 2px;
